@@ -1,0 +1,22 @@
+---
+- name: Create 10 users with hostnames
+  hosts: all
+  become: true
+  vars:
+    users_count: 10
+    user: 'felhasznalo'
+    mount: "/data/speci/"
+    banner: "Hello"
+
+  tasks:
+    - name: Create users
+      user:
+        name: "{{ inventory_hostname }}{{ user }}{{ item }}"
+        password: "{{ 'password' | password_hash('sha512') }}"
+        home: "{{ mount }}{{ inventory_hostname }}{{ user }}{{ item }}"
+        createhome: yes
+        state: present
+      with_items: "{{ range(users_count) | list }}"
+
+  roles:
+    - banner

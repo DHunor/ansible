@@ -1,0 +1,6 @@
+---
+  - name: Update banner
+    lineinfile:
+      path: /etc/motd
+      regexp: '# Your banner goes here$'
+      line: "{{ banner }}"

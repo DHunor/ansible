@@ -1,0 +1,16 @@
+- hosts: all
+  vars:
+    storage_safe_mode: false
+    storage_pools:
+      - name: mypool
+        type: lvm
+        disks: [sda, sdb, sdc, sdd]
+        raid_level: raid1
+        volumes:
+          - name: my_pool
+            size: "1 GiB"
+            mount_point: "mnt"
+            fs_type: xfs
+            state: present
+  roles:
+    - name: rhel-system-roles.storage
