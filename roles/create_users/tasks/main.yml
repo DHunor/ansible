@@ -1,0 +1,9 @@
+---
+  - name: Create users
+    user:
+      name: "{{ inventory_hostname }}{{ user }}{{ item }}"
+      password: "{{ 'password' | password_hash('sha512') }}"
+      home: "{{ mount }}{{ inventory_hostname }}{{ user }}{{ item }}"
+      createhome: yes
+      state: present
+    with_items: "{{ range(users_count) | list }}"

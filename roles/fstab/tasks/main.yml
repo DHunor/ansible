@@ -1,0 +1,24 @@
+---
+  - name: Create mount point
+    file:
+      path: "{{ mount_point }}"
+      state: directory
+
+  - name: Get Raid1 device info
+    raw: "blkid -s UUID -o value /dev/mapper/mypool-my_pool"
+    register: raid_device
+
+  - name: Add mount to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: "UUID={{ raid_device.stdout.strip() }} {{ mount_point }} xfs defaults 0 0"
+      state: present
+      create: yes
+
+  - name: Mount RAID1 device
+    mount:
+      src: "UUID={{ raid_device.stdout.strip() }}"
+      path: "{{ mount_point }}"
+      fstype: xfs
+      opts: defaults
+      state: mounted

@@ -1,10 +1,17 @@
+---
 - hosts: all
+  become: true
   vars:
+    users_count: 10
+    user: 'felhasznalo'
+    mount: "/data/speci"
+    banner: "hello"
+    mount_point: "/data/speci"
     storage_safe_mode: false
     storage_pools:
       - name: mypool
         type: lvm
-        disks: [sda, sdb, sdc, sdd]
+        disks: [sdc, sdd]
         raid_level: raid1
         volumes:
           - name: my_pool
@@ -12,5 +19,9 @@
             mount_point: "mnt"
             fs_type: xfs
             state: present
+
   roles:
     - name: rhel-system-roles.storage
+    - fstab
+    - banner
+    - create_users

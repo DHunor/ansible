@@ -4,3 +4,4 @@
       path: /etc/motd
       regexp: '# Your banner goes here$'
       line: "{{ banner }}"
+    notify: restart motd
